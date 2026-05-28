@@ -133,7 +133,7 @@ void free_pages(u64 addr, u64 n) {
 
 #### 核心概念
 
-**定义：**以块为单位分配连续物理内存页，块的大小固定为 $ 2^k×页大小$（如4KB页，则块大小为4KB、8KB、16KB、32KB…）
+**定义：**以块为单位分配连续物理内存页，块的大小固定为 $2^k \times \text{页大小}$（如4KB页，则块大小为4KB、8KB、16KB、32KB…）
 
 **核心目标**：在保证分配连续内存的同时，通过「分裂」和「合并」机制，减少外部碎片
 
@@ -158,7 +158,8 @@ void free_pages(u64 addr, u64 n) {
 
     *   如果有直接分配；如果没有，则向上找更大的块（如32KB）
 
-    *   将32KB块分裂为两个16KB的伙伴块，分配其中一个给程序，另一个留在空闲链表中![\<img alt="" width="614" height="200" data-attachment-key="FR4UU8L5" src="attachments/FR4UU8L5.png" ztype="zimage"> | 614](attachments/FR4UU8L5.png)
+    *   将32KB块分裂为两个16KB的伙伴块，分配其中一个给程序，另一个留在空闲链表中
+        ![\<img alt="" width="614" height="200" data-attachment-key="FR4UU8L5" src="attachments/FR4UU8L5.png" ztype="zimage"> | 614](attachments/FR4UU8L5.png)
 
 #### 判断示例
 
@@ -700,13 +701,15 @@ LFU：淘汰访问次数最少的页
 
     *   计算页的未访问时长  $t₂ - t₁$
 
-    *   若 $t₂ - t₁ > x$（超过工作集窗口），说明该页已不属于工作集，可以被换出![\<img alt="" width="368" height="398" data-attachment-key="NZGG6UF6" src="attachments/NZGG6UF6.png" ztype="zimage"> | 368](attachments/NZGG6UF6.png)
+    *   若 $t₂ - t₁ > x$（超过工作集窗口），说明该页已不属于工作集，可以被换出
+    ![\<img alt="" width="368" height="398" data-attachment-key="NZGG6UF6" src="attachments/NZGG6UF6.png" ztype="zimage"> | 368](attachments/NZGG6UF6.png)
 
 **页换出规则**
 
 *   换出的是那些**长期未被访问、已脱离工作集**的页，而不是刚使用过的页。
 
-*   示例中，物理页2、4、5的上次访问时间戳仍为$t₁$，且访问位为0，说明它们已经有一段时间未被访问，可作为换出候选![\<img alt="" width="378" height="408" data-attachment-key="XS3TKC8D" src="attachments/XS3TKC8D.png" ztype="zimage"> | 378](attachments/XS3TKC8D.png)
+*   示例中，物理页2、4、5的上次访问时间戳仍为 $t₁$ ，且访问位为0，说明它们已经有一段时间未被访问，可作为换出候选
+![\<img alt="" width="378" height="408" data-attachment-key="XS3TKC8D" src="attachments/XS3TKC8D.png" ztype="zimage"> | 378](attachments/XS3TKC8D.png)
 
 #### 优势与应用
 
