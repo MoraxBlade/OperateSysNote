@@ -1374,9 +1374,6 @@ Linux通过**ucontext**组件实现用户态纤程，每个`ucontext_t`结构体
     *   setcontext：切换到目标纤程上下文执行
 
 *   **代码示例**：
-
-<!---->
-
     ```c
     #include <stdio.h>
     #include <ucontext.h>
@@ -1443,9 +1440,6 @@ Windows通过原生**Fiber库**提供纤程支持，编程模型与Linux ucontex
 Go通过**go关键字**启动协程，语法极简、创建开销极低。
 
 *   代码示例：
-
-<!---->
-
     ```go
     package main
     import (
@@ -1472,9 +1466,6 @@ Go通过**go关键字**启动协程，语法极简、创建开销极低。
 
 *   核心特性：支持阻塞式通信，保证数据收发有序
 *   代码示例：
-
-<!---->
-
     ```go
     package main
     import (
@@ -1508,7 +1499,6 @@ Go通过**go关键字**启动协程，语法极简、创建开销极低。
 4.  算法实现：协程配合管道实现质数筛选（埃拉托斯特尼筛法）
 
 网络处理代码示例：
-
 ```go
 func handler(c net.Conn) {
     c.Write([]byte("ok"))
