@@ -121,7 +121,7 @@ ARM 并不是只有一种指令模式，它会根据场景切换状态：
 
     *   **多模态**
 
-        *   寄存器对应的32位为 $W_0$\~$W_{30}$ ，访问时仅操作$X_n$的低32位，高位清零（由系统决定）
+        *   寄存器对应的32位为 $W_0 \sim W_{30}$ ，访问时仅操作 $X_n$ 的低32位，高位清零（由系统决定）
         
             ![\<img alt="" data-attachment-key="GRF37YQ2" width="508" height="95" src="attachments/GRF37YQ2.png" ztype="zimage"> | 508](attachments/GRF37YQ2.png)
 
@@ -137,7 +137,8 @@ ARM 并不是只有一种指令模式，它会根据场景切换状态：
 
 
 
-            *   好处：便于指令级并行![\<img alt="" data-attachment-key="QL2KIHCJ" width="513" height="76" src="attachments/QL2KIHCJ.png" ztype="zimage"> | 513](attachments/QL2KIHCJ.png)
+            *   好处：便于指令级并行
+                ![\<img alt="" data-attachment-key="QL2KIHCJ" width="513" height="76" src="attachments/QL2KIHCJ.png" ztype="zimage"> | 513](attachments/QL2KIHCJ.png)
 
 *   特殊寄存器：用来保存一些特定的数据
 
