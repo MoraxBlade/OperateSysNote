@@ -181,7 +181,9 @@ ARM 并不是只有一种指令模式，它会根据场景切换状态：
     *   取：LDR（load）
     *   存：STR（store）![\<img alt="" data-attachment-key="NPEWVZ26" width="858" height="158" src="attachments/NPEWVZ26.png" ztype="zimage"> | 858](attachments/NPEWVZ26.png)
 
-*   寄存器类型、名字决定存取数据长度![\<img alt="" data-attachment-key="4E74274B" width="502" height="131" src="attachments/4E74274B.png" ztype="zimage"> | 502](attachments/4E74274B.png)
+*   寄存器类型、名字决定存取数据长度
+
+    ![\<img alt="" data-attachment-key="4E74274B" width="502" height="131" src="attachments/4E74274B.png" ztype="zimage"> | 502](attachments/4E74274B.png)
 
 **例子**：交换函数
 
@@ -594,7 +596,9 @@ CPU接口：给每个CPU核有对应的接口
 
     *   若外设一直保持有效电平，会持续触发中断请求，导致重复
 
-    *   适合需要持续告知系统“有事待处理”的场景![\<img alt="" data-attachment-key="HX7QV3Y9" width="652" height="230" src="attachments/HX7QV3Y9.png" ztype="zimage"> | 652](attachments/HX7QV3Y9.png)
+    *   适合需要持续告知系统“有事待处理”的场景
+    
+        ![\<img alt="" data-attachment-key="HX7QV3Y9" width="652" height="230" src="attachments/HX7QV3Y9.png" ztype="zimage"> | 652](attachments/HX7QV3Y9.png)
 
 *   边沿触发：通过信号的跳变沿来请求中断，只对信号的变化敏感
 
@@ -602,7 +606,9 @@ CPU接口：给每个CPU核有对应的接口
 
     *   适合检测“事件发生”的场景（如按键按下）
 
-    *   抗干扰能力更强![\<img alt="" data-attachment-key="NL78YCBD" width="649" height="235" src="attachments/NL78YCBD.png" ztype="zimage"> | 649](attachments/NL78YCBD.png)
+    *   抗干扰能力更强
+    
+        ![\<img alt="" data-attachment-key="NL78YCBD" width="649" height="235" src="attachments/NL78YCBD.png" ztype="zimage"> | 649](attachments/NL78YCBD.png)
 
 #### 设备的内存映射以及MMIO
 
@@ -646,7 +652,9 @@ CPU接口：给每个CPU核有对应的接口
 
 *   使用MMIO，设置GIC中寄存器，启用timer
 
-*   使用MMIO，从GIC中的寄存 器里获得中断信息![\<img alt="" data-attachment-key="C4V9Z6L4" width="658" height="350" src="attachments/C4V9Z6L4.png" ztype="zimage"> | 658](attachments/C4V9Z6L4.png)![]()
+*   使用MMIO，从GIC中的寄存 器里获得中断信息
+    
+    ![\<img alt="" data-attachment-key="C4V9Z6L4" width="658" height="350" src="attachments/C4V9Z6L4.png" ztype="zimage"> | 658](attachments/C4V9Z6L4.png)![]()
 
 ### 3.2.3异常处理与异常向量表
 
