@@ -138,6 +138,7 @@ ARM 并不是只有一种指令模式，它会根据场景切换状态：
 
 
             *   好处：便于指令级并行
+                
                 ![\<img alt="" data-attachment-key="QL2KIHCJ" width="513" height="76" src="attachments/QL2KIHCJ.png" ztype="zimage"> | 513](attachments/QL2KIHCJ.png)
 
 *   特殊寄存器：用来保存一些特定的数据
