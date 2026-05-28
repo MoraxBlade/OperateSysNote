@@ -702,14 +702,16 @@ LFU：淘汰访问次数最少的页
     *   计算页的未访问时长  $t₂ - t₁$
 
     *   若 $t₂ - t₁ > x$（超过工作集窗口），说明该页已不属于工作集，可以被换出
-    ![\<img alt="" width="368" height="398" data-attachment-key="NZGG6UF6" src="attachments/NZGG6UF6.png" ztype="zimage"> | 368](attachments/NZGG6UF6.png)
+
+        ![\<img alt="" width="368" height="398" data-attachment-key="NZGG6UF6" src="attachments/NZGG6UF6.png" ztype="zimage"> | 368](attachments/NZGG6UF6.png)
 
 **页换出规则**
 
 *   换出的是那些**长期未被访问、已脱离工作集**的页，而不是刚使用过的页。
 
 *   示例中，物理页2、4、5的上次访问时间戳仍为 $t₁$ ，且访问位为0，说明它们已经有一段时间未被访问，可作为换出候选
-![\<img alt="" width="378" height="408" data-attachment-key="XS3TKC8D" src="attachments/XS3TKC8D.png" ztype="zimage"> | 378](attachments/XS3TKC8D.png)
+    
+    ![\<img alt="" width="378" height="408" data-attachment-key="XS3TKC8D" src="attachments/XS3TKC8D.png" ztype="zimage"> | 378](attachments/XS3TKC8D.png)
 
 #### 优势与应用
 
