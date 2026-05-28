@@ -115,13 +115,13 @@ ARM 并不是只有一种指令模式，它会根据场景切换状态：
 
     *   共31个64位通用寄存器，为 $X_0$ \~ $X_{30}$
 
-    *   常用寄存器：$X_0, X_1, X_8, X_{29}, X_{30}$
+    *   常用寄存器： $X_0, X_1, X_8, X_{29}, X_{30}$
 
         ![\<img alt="" data-attachment-key="C63AH4R4" width="246" height="348" src="attachments/C63AH4R4.png" ztype="zimage"> | 246](attachments/C63AH4R4.png)
 
     *   **多模态**
 
-        *   寄存器对应的32位为$W_0$\~$W_{30}$，访问时仅操作$X_n$的低32位，高位清零（由系统决定）
+        *   寄存器对应的32位为 $W_0$\~$W_{30}$ ，访问时仅操作$X_n$的低32位，高位清零（由系统决定）
         
             ![\<img alt="" data-attachment-key="GRF37YQ2" width="508" height="95" src="attachments/GRF37YQ2.png" ztype="zimage"> | 508](attachments/GRF37YQ2.png)
 
