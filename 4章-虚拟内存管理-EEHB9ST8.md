@@ -91,7 +91,9 @@
 
 *   物理页：物理内存也被划分成连续的、等长的物理页
 
-*   虚拟页和物理页的页长固定且相等![\<img alt="" data-attachment-key="5E83VQXL" width="333" height="255" src="attachments/5E83VQXL.png" ztype="zimage"> | 333](attachments/5E83VQXL.png)
+*   虚拟页和物理页的页长固定且相等
+
+    ![\<img alt="" data-attachment-key="5E83VQXL" width="333" height="255" src="attachments/5E83VQXL.png" ztype="zimage"> | 333](attachments/5E83VQXL.png)
 
 **页表**
 
@@ -106,7 +108,9 @@
 
 *   **单位**：页表项（PTE）
 
-*   **页表下虚拟地址的结构**：虚拟页号+页内偏移量![\<img alt="" data-attachment-key="8JJB7A93" width="503" height="235" src="attachments/8JJB7A93.png" ztype="zimage"> | 503](attachments/8JJB7A93.png)
+*   **页表下虚拟地址的结构**：虚拟页号+页内偏移量
+
+    ![\<img alt="" data-attachment-key="8JJB7A93" width="503" height="235" src="attachments/8JJB7A93.png" ztype="zimage"> | 503](attachments/8JJB7A93.png)
 
 **翻译过程**
 
@@ -234,7 +238,9 @@ $\text{页表大小} = \frac{\text{总虚拟地址空间}}{\text{页面大小}} 
 
 *   **映射大小**：
 
-    *   本质是：在某一级页表就终止翻译，把后面几级索引的地址位全部当作 “页内偏移”，所以页大小 =$2^{后续所有位数}$![\<img alt="" data-attachment-key="E6CU2CZ4" width="611" height="218" src="attachments/E6CU2CZ4.png" ztype="zimage"> | 611](attachments/E6CU2CZ4.png)
+    *   本质是：在某一级页表就终止翻译，把后面几级索引的地址位全部当作 “页内偏移”，所以页大小 = $2^{后续所有位数}$ 
+    
+        ![\<img alt="" data-attachment-key="E6CU2CZ4" width="611" height="218" src="attachments/E6CU2CZ4.png" ztype="zimage"> | 611](attachments/E6CU2CZ4.png)
 
     *   L0：可映射 <u>512GB 大页</u> 或指向 L1 页表
 
@@ -499,7 +505,8 @@ CPU 上电启动后<u>默认使用物理地址</u>，这是因为 MMU（内存�
 
 *   **操作系统直接使用连续内存空间**，虚拟地址与物理内存保持简单的线性映射。
 
-*   **MMU 仅保存固定偏移量**：在直接映射场景下，MMU 只需保存虚拟地址低 12 位的固定值（如 0x1234\_00000000），即可与页内偏移拼接得到物理地址![\<img alt="" data-attachment-key="ISNYWRM8" width="790" height="366" src="attachments/ISNYWRM8.png" ztype="zimage"> | 790](attachments/ISNYWRM8.png)
+*   **MMU 仅保存固定偏移量**：在直接映射场景下，MMU 只需保存虚拟地址低 12 位的固定值（如 0x1234\_00000000），即可与页内偏移拼接得到物理地址
+    ![\<img alt="" data-attachment-key="ISNYWRM8" width="790" height="366" src="attachments/ISNYWRM8.png" ztype="zimage"> | 790](attachments/ISNYWRM8.png)
 
 *   **应用程序页表的地址转换逻辑**
 
@@ -570,7 +577,8 @@ CPU 上电启动后<u>默认使用物理地址</u>，这是因为 MMU（内存�
         *   每个段为连续二进制块
         *   由加载器加载到指定地址执行
 
-    *   可选的段头表![\<img alt="" data-attachment-key="4YECRF9Y" width="281" height="367" src="attachments/4YECRF9Y.png" ztype="zimage"> | 281](attachments/4YECRF9Y.png)
+    *   可选的段头表
+    ![\<img alt="" data-attachment-key="4YECRF9Y" width="281" height="367" src="attachments/4YECRF9Y.png" ztype="zimage"> | 281](attachments/4YECRF9Y.png)
 
 **ELF头部结构**
 
@@ -1193,4 +1201,4 @@ void sys_mmap(u64 addr, u64 length, ...)
 **题目**
 ![](attachments/屏幕截图_8-5-2026_11205_.jpeg)
 - 对应大页的L1页表项管辖位数=L2页表项12位+页大小4kb（12位）=24位
-- $ 2^{24}位=2^4×2^{10}×2^{10}=16MB$
+-  $ 2^{24}位=2^4×2^{10}×2^{10}=16MB$ 
