@@ -46,7 +46,7 @@
 
 以多线程累加共享变量`balance`为例，直观展示竞争条件的产生：
 
-```
+```c
 volatile int balance = 0;
 void *mythread(void *arg) {
     int i;
@@ -76,10 +76,10 @@ int main(int argc, char *argv[]) {
 
 C语言中的`balance++`并非原子操作，会被编译为三条汇编指令：
 
-```
-ldr r3, [r2]    // 从内存加载balance到寄存器r3
-adds r3, r3, #1 // 寄存器值加1
-str r3, [r2]    // 将结果写回内存
+```nasm
+ldr r3, [r2]    ; 从内存加载balance到寄存器r3
+adds r3, r3, #1 ; 寄存器值加1
+str r3, [r2]    ; 将结果写回内存
 ```
 
 **错误场景分类**
@@ -110,7 +110,7 @@ str r3, [r2]    // 将结果写回内存
 
 **共享变量定义**（都是共享的）
 
-```
+```c
 // 缓冲区状态计数
 volatile int empty_slot = 5;   // 空槽数量，缓冲区容量为5
 volatile int filled_slot = 0;  // 满槽数量
@@ -127,7 +127,7 @@ int buffer[5];                 // 共享缓冲区
 
 **缓冲区操作函数**：
 
-```
+```c
 void buffer_add(int msg) {
     buffer[buffer_write_cnt] = msg;
     buffer_write_cnt = (buffer_write_cnt + 1) % 5;
@@ -143,7 +143,7 @@ int buffer_remove(void) {
 
 **生产者与消费者逻辑**：
 
-```
+```c
 void producer(void) {
     int new_msg;
     while (TRUE) {
@@ -229,7 +229,7 @@ void consumer(void) {
 
 **基本原理**：在单核系统中，线程的切换依赖于时钟中断。如果在进入临界区前关闭所有硬件中断，操作系统就无法进行线程调度，从而保证临界区代码的原子性执行。
 
-```
+```c
 while (TRUE) {
     申请进入临界区
     关闭中断
@@ -268,7 +268,7 @@ while (TRUE) {
 
 #### 算法实现代码
 
-```
+```c
 // 全局共享变量
 volatile int flag[2] = {FALSE, FALSE};
 volatile int turn = 0;
@@ -358,7 +358,7 @@ flag与turn结合，实现了有限等待和空闲让进
 
 CAS是最常用的原子操作，由一条汇编指令完成，其逻辑等价于以下C代码（注意：C代码仅表示逻辑，本身不是原子操作）：
 
-```
+```c
 int CAS(int *addr, int expected, int new_value) {
     int tmp = *addr;
     if (*addr == expected) {
@@ -370,7 +370,7 @@ int CAS(int *addr, int expected, int new_value) {
 
 **加锁实现**：利用CAS可以实现简单的互斥锁：
 
-```
+```c
 volatile int lock = 0; // 0表示锁空闲，1表示锁已被占用
 while (CAS(&lock, 0, 1) != 0); // 死循环忙等，直到获取锁
 // 临界区代码
@@ -383,7 +383,7 @@ lock = 0; // 释放锁
 
 FAA原子操作将指定内存地址的值加上一个增量，并返回操作前的原始值，其逻辑等价于：
 
-```
+```c
 int FAA(int *addr, int add_value) {
     int tmp = *addr;
     *addr = tmp + add_value;
@@ -416,13 +416,13 @@ ARM采用更高效的LL/SC机制实现原子操作，分为两步：
 
 ARM架构下CAS操作的汇编实现逻辑：
 
-```
+```nasm
 retry:
-    ldxr x0, addr        // LL：加载addr的值到x0，启动地址监视器
-    cmp x0, expected     // 比较加载值与预期值
-    bne out              // 不相等则直接退出
-    stxr x1, new_value, addr // SC：尝试写入新值
-    cbnz x1, retry       // 写入失败则回到retry重试
+    ldxr x0, addr        ; LL：加载addr的值到x0，启动地址监视器
+    cmp x0, expected     ; 比较加载值与预期值
+    bne out              ; 不相等则直接退出
+    stxr x1, new_value, addr ; SC：尝试写入新值
+    cbnz x1, retry       ; 写入失败则回到retry重试
 out:
 ```
 
@@ -442,7 +442,7 @@ out:
 
 使用互斥锁保护共享的缓冲区指针，彻底解决多生产者场景下的数据覆盖和计数错误问题：
 
-```
+```c
 volatile int buffer_write_cnt = 0;
 volatile int buffer_read_cnt = 0;
 int buffer[5];
@@ -476,7 +476,7 @@ int buffer_remove_safe(void) {
 
 #### 自旋锁的实现
 
-```
+```c
 // 自旋锁初始化
 void lock_init(int *lock) {
     *lock = 0; // 0表示锁空闲，1表示锁已被占用
@@ -515,7 +515,7 @@ void unlock(int *lock) {
 
 #### 排号自旋锁的数据结构与实现
 
-```
+```c
 struct lock {
     volatile int owner; // 当前正在持有锁的线程的序号
     volatile int next;  // 下一个可分配的排队序号
@@ -630,7 +630,7 @@ void unlock(struct lock *lock) {
 
 使用条件变量重构生产者消费者模型，消除忙等带来的CPU资源浪费
 
-```
+```c
 // 共享变量定义
 int empty_slot = 5;       // 空槽数量
 int filled_slot = 0;      // 满槽数量
@@ -702,7 +702,7 @@ void consumer(void) {
 
 条件变量的核心是维护一个等待线程的链表，操作系统内核负责管理线程的阻塞与唤醒：
 
-```
+```c
 // 条件变量的底层数据结构
 struct cond {
     struct thread *wait_list; // 阻塞线程的链表头
@@ -711,7 +711,7 @@ struct cond {
 
 #### cond\_wait的实现逻辑
 
-```
+```c
 void cond_wait(struct cond *cond, struct lock *mutex) {
     // 1. 将当前线程加入等待队列
     list_append(cond->wait_list, thread_self());
@@ -726,7 +726,7 @@ void cond_wait(struct cond *cond, struct lock *mutex) {
 
 #### cond\_signal的实现逻辑
 
-```
+```c
 void cond_signal(struct cond *cond) {
     // 如果等待队列非空，唤醒第一个等待线程
     if (!list_empty(cond->wait_list)) {
@@ -737,7 +737,7 @@ void cond_signal(struct cond *cond) {
 
 #### cond\_broadcast的实现逻辑
 
-```
+```c
 void cond_broadcast(struct cond *cond) {
     // 唤醒等待队列中的所有线程
     while (!list_empty(cond->wait_list)) {
@@ -811,7 +811,7 @@ P是荷兰语"Proberen"（检验）的缩写，用于申请资源：
 
 **原始逻辑（仅示意，实际实现无忙等）**：
 
-```
+```c
 void wait(int *S) {
     while (*S <= 0); // 循环忙等（实际实现会替换为阻塞）
     *S = *S - 1;
@@ -828,7 +828,7 @@ V是荷兰语"Verhogen"（自增）的缩写，用于释放资源：
 
 **原始逻辑（仅示意）**：
 
-```
+```c
 void signal(int *S) {
     *S = *S + 1;
 }
@@ -838,7 +838,7 @@ void signal(int *S) {
 
 使用信号量重构生产者消费者模型，代码变得极其简洁，无需手动维护条件判断和互斥锁的复杂配合：
 
-```
+```c
 // 信号量定义
 sem_t empty_slot;  // 空槽资源，初值为5（缓冲区容量）
 sem_t filled_slot; // 满槽资源，初值为0
@@ -879,7 +879,7 @@ void consumer(void) {
 
 #### 信号量的数据结构
 
-```
+```c
 struct sem {
     int value;          // 资源计数：正=可用资源数，负=等待线程数
     int wakeup;         // 应当唤醒的线程数量（用于匹配V操作的资源释放）
@@ -898,7 +898,7 @@ struct sem {
 
 #### P操作（wait）的实现
 
-```
+```c
 void wait(struct sem *S) {
     lock(&S->sem_lock);
     S->value--; // 先申请资源
@@ -920,7 +920,7 @@ void wait(struct sem *S) {
 
 #### V操作（signal）的实现
 
-```
+```c
 void signal(struct sem *S) {
     lock(&S->sem_lock);
     S->value++; // 释放一个资源
@@ -947,7 +947,7 @@ void signal(struct sem *S) {
 
 **示例**：
 
-```
+```c
 sem_t mutex;
 sem_init(&mutex, 1); // 初始值为1
 
@@ -1050,7 +1050,7 @@ signal(&mutex);
 
 #### 数据结构定义
 
-```
+```c
 struct rwlock {
     int reader_cnt;          // 当前在临界区的读者数量
     struct lock reader_lock; // 保护reader_cnt的互斥锁
@@ -1060,7 +1060,7 @@ struct rwlock {
 
 #### 读者锁操作
 
-```
+```c
 void lock_reader(struct rwlock *lock) {
     lock(&lock->reader_lock);    // 保护读者计数器
     lock->reader_cnt++;
@@ -1088,7 +1088,7 @@ void unlock_reader(struct rwlock *lock) {
 
 #### 写者锁操作
 
-```
+```c
 void lock_writer(struct rwlock *lock) {
     lock(&lock->writer_lock); // 直接加写锁，阻塞所有读者和其他写者
 }
@@ -1138,7 +1138,7 @@ void unlock_writer(struct rwlock *lock) {
 
 #### 数据结构定义
 
-```
+```c
 struct rwlock {
     volatile int reader_cnt;     // 当前在临界区的读者数量
     volatile bool has_writer;    // 是否有写者正在等待或执行
@@ -1150,7 +1150,7 @@ struct rwlock {
 
 #### 读者锁操作
 
-```
+```c
 void lock_reader(struct rwlock *rwlock) {
     lock(&rwlock->lock);
     
@@ -1178,7 +1178,7 @@ void unlock_reader(struct rwlock *rwlock) {
 
 #### 写者锁操作
 
-```
+```c
 void lock_writer(struct rwlock *rwlock) {
     lock(&rwlock->lock);
     
@@ -1332,7 +1332,7 @@ RCU 将数据更新过程拆分为三个独立的阶段，通过"*新旧版本�
 
 #### 核心接口
 
-```
+```c
 // 进入RCU读临界区
 void rcu_read_lock(void);
 
@@ -1365,7 +1365,7 @@ RCU读临界区有极其严格的限制，违反任何一条都会导致系统�
 
 #### 写者代码示例（替换链表节点）
 
-```
+```c
 void replace_node(struct node *prev, struct node *old, int newv) {
     // ① 加自旋锁：保证多个写者之间互斥
     spin_lock(&list_lock);
@@ -1468,7 +1468,7 @@ void replace_node(struct node *prev, struct node *old, int newv) {
 
 两个线程以相反的顺序申请两把互斥锁：
 
-```
+```c
 void proc_A(void) {
     lock(A);       // 先申请锁A
     lock(B);       // 再申请锁B
@@ -1546,7 +1546,7 @@ void proc_B(void) {
 
     *   代码
 
-        ```
+        ```c
         while(true) {
             if(trylock(A) == SUCC) {    // trylock非阻塞，立即返回成功或失败
                 if(trylock(B) == SUCC) {
@@ -1657,7 +1657,7 @@ void proc_B(void) {
 
 活锁通常由"不允许持有并等待"的死锁预防方法导致：
 
-```
+```c
 // proc_A的逻辑
 while(true) {
     if(trylock(A) == SUCC) {

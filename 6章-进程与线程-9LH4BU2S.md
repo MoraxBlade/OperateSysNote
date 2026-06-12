@@ -1091,7 +1091,7 @@ int main() {
 
 **函数原型：**
 
-```
+```c
 void pthread_exit(void *retval);
 ```
 
